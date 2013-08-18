@@ -6,6 +6,7 @@ import (
 	"log"
 	"os/user"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -28,7 +29,7 @@ func HyokiFile() []byte {
 	return notes
 }
 
-func Notes() []string {
+func Notes() map[string][]string {
 	notes := HyokiFile()
 
 	sections := make(map[string][]string)
@@ -41,11 +42,22 @@ func Notes() []string {
 			sections[currentSection] = append(sections[currentSection], line)
 		}
 	}
-	return strings.Split(string(notes), "\n")
+	return sections
+}
+
+func PrintSections(notes map[string][]string, exp string) {
+	rexp, _ := regexp.Compile(exp)
+	for section := range notes {
+		if rexp.Match([]byte(section)) {
+			fmt.Println(section)
+			for _, line := range notes[section] {
+				fmt.Println(line)
+			}
+		}
+	}
 }
 
 func main() {
-	for _, line := range Notes() {
-		fmt.Println(line)
-	}
+	notes := Notes()
+	PrintSections(notes, "^s")
 }
