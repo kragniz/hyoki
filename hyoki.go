@@ -14,7 +14,7 @@ type Section struct {
 	lines []string
 }
 
-func Notes() []string {
+func HyokiFile() []byte {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
@@ -25,6 +25,11 @@ func Notes() []string {
 	if err != nil {
 		fmt.Println("Can't open notes file")
 	}
+	return notes
+}
+
+func Notes() []string {
+	notes := HyokiFile()
 
 	sections := make(map[string][]string)
 	currentSection := ""
