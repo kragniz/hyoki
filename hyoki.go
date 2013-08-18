@@ -1,18 +1,46 @@
 package main
 
 import (
-    "fmt"
-    "io/ioutil"
-    "strings"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"os/user"
+	"path/filepath"
+	"strings"
 )
 
+type Section struct {
+	name  string
+	lines []string
+}
+
+func Notes() []string {
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	path := filepath.Join(usr.HomeDir, ".hyoki", "notes")
+	notes, err := ioutil.ReadFile(path)
+
+	if err != nil {
+		fmt.Println("Can't open notes file")
+	}
+
+	sections := make(map[string][]string)
+	currentSection := ""
+	for _, line := range strings.Split(string(notes), "\n") {
+		if !strings.HasPrefix(line, "  ") && len(line) > 0 {
+			sections[line] = []string{}
+			currentSection = line
+		} else if currentSection != "" {
+			sections[currentSection] = append(sections[currentSection], line)
+		}
+	}
+	return strings.Split(string(notes), "\n")
+}
+
 func main() {
-    content, err := ioutil.ReadFile("notes")
-    if err != nil {
-        fmt.Println("Can't open notes file")
-    }
-    lines := strings.Split(string(content), "\n")
-    for _, line := range lines {
-        fmt.Println(line)
-    }
+	for _, line := range Notes() {
+		fmt.Println(line)
+	}
 }
