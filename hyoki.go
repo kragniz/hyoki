@@ -13,11 +13,6 @@ import (
 
 type Notes map[string][]string
 
-type Section struct {
-	name  string
-	lines []string
-}
-
 func HyokiFile() []byte {
 	usr, err := user.Current()
 	if err != nil {
