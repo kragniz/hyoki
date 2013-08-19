@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+type Notes map[string][]string
+
 type Section struct {
 	name  string
 	lines []string
@@ -30,10 +32,10 @@ func HyokiFile() []byte {
 	return notes
 }
 
-func Notes() map[string][]string {
+func notes() Notes {
 	notes := HyokiFile()
 
-	sections := make(map[string][]string)
+	sections := make(Notes)
 	currentSection := ""
 	for _, line := range strings.Split(string(notes), "\n") {
 		if !strings.HasPrefix(line, "  ") && len(line) > 0 {
@@ -46,7 +48,7 @@ func Notes() map[string][]string {
 	return sections
 }
 
-func PrintSections(notes map[string][]string, exp string) {
+func PrintSections(notes Notes, exp string) {
 	rexp, _ := regexp.Compile(exp)
 	for section := range notes {
 		if rexp.Match([]byte(section)) {
@@ -59,7 +61,7 @@ func PrintSections(notes map[string][]string, exp string) {
 }
 
 func main() {
-	notes := Notes()
+	notes := notes()
 	args := os.Args
 
 	if len(args) > 1 {
