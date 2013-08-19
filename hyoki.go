@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/user"
 	"path/filepath"
 	"regexp"
@@ -59,5 +60,12 @@ func PrintSections(notes map[string][]string, exp string) {
 
 func main() {
 	notes := Notes()
-	PrintSections(notes, "^s")
+	args := os.Args
+
+	if len(args) > 1 {
+		PrintSections(notes, args[1])
+	} else {
+		PrintSections(notes, "")
+	}
+
 }
