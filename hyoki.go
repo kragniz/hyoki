@@ -24,7 +24,7 @@ func HyokiFile() []byte {
 	notes, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		fmt.Println("Can't open notes file")
+		fmt.Println(path, "doesn't seem to be a notes file")
 	}
 	return notes
 }
