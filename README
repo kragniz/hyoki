@@ -1,0 +1,15 @@
+Hyoki
+=====
+
+A small program to help manage and view a todo list.
+
+Notes are currently stored in ~/.hyoki/notes and look like:
+
+    section
+        -some item
+        -another item
+            *a note on that item
+    something
+        -do something about something
+            *do it like this
+        -do something else
