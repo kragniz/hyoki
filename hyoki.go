@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"os/user"
 	"path/filepath"
 	"regexp"
@@ -72,6 +73,18 @@ func ListSections(notes Notes) {
 	}
 }
 
+func Edit() {
+	cmd := exec.Command("vim", HyokiPath())
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	notes := notes()
 	args := os.Args
@@ -82,8 +95,10 @@ func main() {
 		case firstArg == "list-sections":
 			ListSections(notes)
 			return
+		case firstArg == "edit":
+			Edit()
+			return
 		}
-
 		PrintSections(notes, args[1])
 	} else {
 		PrintSections(notes, "")
