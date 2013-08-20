@@ -13,12 +13,16 @@ import (
 
 type Notes map[string][]string
 
-func HyokiFile() []byte {
+func HyokiPath() string {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
 	}
-	path := filepath.Join(usr.HomeDir, ".hyoki", "notes")
+	return filepath.Join(usr.HomeDir, ".hyoki", "notes")
+}
+
+func HyokiFile() []byte {
+	path := HyokiPath()
 	notes, err := ioutil.ReadFile(path)
 
 	if err != nil {
