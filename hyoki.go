@@ -55,11 +55,31 @@ func PrintSections(notes Notes, exp string) {
 	}
 }
 
+func ListSections(notes Notes) {
+	i := 0
+	for section := range notes {
+		fmt.Print(section, "")
+		i++
+		if i < len(notes) {
+			fmt.Print(" ")
+		} else {
+			fmt.Print("\n")
+		}
+	}
+}
+
 func main() {
 	notes := notes()
 	args := os.Args
 
 	if len(args) > 1 {
+		firstArg := args[1]
+		switch {
+		case firstArg == "list-sections":
+			ListSections(notes)
+			return
+		}
+
 		PrintSections(notes, args[1])
 	} else {
 		PrintSections(notes, "")
