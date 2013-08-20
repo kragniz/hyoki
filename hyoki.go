@@ -73,16 +73,12 @@ func ListSections(notes Notes) {
 	}
 }
 
-func Edit() {
-	cmd := exec.Command("vim", HyokiPath())
+func Edit(filename string) error {
+	cmd := exec.Command("vim", filename)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-
-	err := cmd.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
+	return cmd.Run()
 }
 
 func main() {
@@ -96,7 +92,7 @@ func main() {
 			ListSections(notes)
 			return
 		case firstArg == "edit":
-			Edit()
+			Edit(HyokiPath())
 			return
 		}
 		PrintSections(notes, args[1])
