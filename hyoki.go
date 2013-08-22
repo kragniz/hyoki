@@ -19,7 +19,7 @@ func HyokiPath() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return filepath.Join(usr.HomeDir, ".hyoki", "notes")
+	return filepath.Join(usr.HomeDir, ".hyoki", "notes.hyk")
 }
 
 func HyokiFile() []byte {
