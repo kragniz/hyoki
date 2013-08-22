@@ -5,3 +5,6 @@ hyoki: hyoki.go
 
 install:
 	cp hyoki /usr/local/bin/
+
+viminstall:
+	cp -Rv vim/* ~/.vim
