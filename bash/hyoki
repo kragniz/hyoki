@@ -1,0 +1,6 @@
+_hyoki()
+{
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$(hyoki list-sections) list-sections edit" -- $cur) )
+}
+complete -F _hyoki hyoki
