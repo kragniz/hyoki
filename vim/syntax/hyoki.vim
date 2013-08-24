@@ -9,7 +9,7 @@ syntax match hashtag "#\w*"
 highlight link hashtag constant
 
 syntax match item "^\s*-"
-highlight link item statement
+highlight link item comment
 
 syntax match subitem "^\s*\*"
 highlight link subitem comment
