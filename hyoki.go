@@ -73,6 +73,15 @@ func ListSections(notes Notes) {
 	}
 }
 
+func EditSection(filename string, section string) error {
+	cmd := exec.Command("vim", "-c", "/^"+section, filename)
+	fmt.Println("-c", "/^"+section)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 func Edit(filename string) error {
 	cmd := exec.Command("vim", filename)
 	cmd.Stdin = os.Stdin
@@ -92,7 +101,12 @@ func main() {
 			ListSections(notes)
 			return
 		case firstArg == "edit":
-			Edit(HyokiPath())
+			if len(args) > 2 {
+				section := args[2]
+				EditSection(HyokiPath(), section)
+			} else {
+				Edit(HyokiPath())
+			}
 			return
 		}
 		PrintSections(notes, args[1])
