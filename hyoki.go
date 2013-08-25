@@ -75,7 +75,6 @@ func ListSections(notes Notes) {
 
 func EditSection(filename string, section string) error {
 	cmd := exec.Command("vim", "-c", "/^"+section, filename)
-	fmt.Println("-c", "/^"+section)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
