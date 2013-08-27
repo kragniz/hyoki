@@ -19,7 +19,20 @@ func HyokiPath() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return filepath.Join(usr.HomeDir, ".hyoki", "notes.hyk")
+	return filepath.Join(usr.HomeDir, ".hyoki")
+}
+
+func HyokiFilenames() []string {
+	file, _ := os.Open(HyokiPath())
+	names, _ := file.Readdirnames(0)
+	hykFiles := []string{}
+	for _, name := range names {
+		fmt.Println(name)
+		if strings.HasSuffix(name, ".hyk") {
+			hykFiles = append(names, name)
+		}
+	}
+	return hykFiles
 }
 
 func HyokiFile() []byte {
