@@ -2,7 +2,7 @@ if exists("b:current_syntax")
   finish
 endif
 
-syntax match section "^\w*"
+syntax match section "^\(\w\|\-\)*"
 highlight link section todo
 
 syntax match hashtag "#\w*"
