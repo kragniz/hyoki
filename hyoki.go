@@ -13,65 +13,39 @@ import (
 )
 
 type Notes map[string][]string
-type NotesFiles map[string]Notes
-type NoteFileList map[string][]byte
 
 func HyokiPath() string {
 	usr, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
 	}
-	return filepath.Join(usr.HomeDir, ".hyoki")
+	return filepath.Join(usr.HomeDir, ".hyoki", "notes.hyk")
 }
 
-func HyokiFilenames() []string {
-	file, _ := os.Open(HyokiPath())
-	names, _ := file.Readdirnames(0)
-	hykFiles := []string{}
-	for _, name := range names {
-		fmt.Println(name)
-		if strings.HasSuffix(name, ".hyk") {
-			hykFiles = append(names, name)
-		}
-	}
-	return hykFiles
-}
-
-func HyokiFiles() NoteFileList {
+func HyokiFile() []byte {
 	path := HyokiPath()
 
-	files := make(NoteFileList)
-	for _, filename := range HyokiFilenames() {
-		fmt.Println("wooo", filename)
-		notes, err := ioutil.ReadFile(filepath.Join(path, filename))
-		files[filename] = notes
+	notes, err := ioutil.ReadFile(path)
 
-		if err != nil {
-			fmt.Println(path, "doesn't seem to be a notes file")
-		}
-
+	if err != nil {
+		fmt.Println(path, "doesn't seem to be a notes file")
 	}
-	return files
+	return notes
 }
 
-func notes() NotesFiles {
-	notes := HyokiFiles()
-	notesFiles := make(NotesFiles)
-	for _, filename := range notes {
-		sections := make(Notes)
-		currentSection := ""
-		filename := string(filename)
-		for _, line := range strings.Split(string(notes[filename]), "\n") {
-			if !strings.HasPrefix(line, "  ") && len(line) > 0 {
-				sections[line] = []string{}
-				currentSection = line
-			} else if currentSection != "" {
-				sections[currentSection] = append(sections[currentSection], line)
-			}
+func notes() Notes {
+	notes := HyokiFile()
+	sections := make(Notes)
+	currentSection := ""
+	for _, line := range strings.Split(string(notes), "\n") {
+		if !strings.HasPrefix(line, "  ") && len(line) > 0 {
+			sections[line] = []string{}
+			currentSection = line
+		} else if currentSection != "" {
+			sections[currentSection] = append(sections[currentSection], line)
 		}
-		notesFiles[filename] = sections
 	}
-	return notesFiles
+	return sections
 }
 
 func PrintSections(notes Notes, exp string) {
@@ -86,14 +60,7 @@ func PrintSections(notes Notes, exp string) {
 	}
 }
 
-func PrintFileSections(notesFiles NotesFiles, exp string) {
-	for filename, _ := range notesFiles {
-		fmt.Println("hi there!")
-		PrintSections(notesFiles[filename], exp)
-	}
-}
-
-func listSections(notes Notes) {
+func ListSections(notes Notes) {
 	i := 0
 	for section := range notes {
 		fmt.Print(section, "")
@@ -103,12 +70,6 @@ func listSections(notes Notes) {
 		} else {
 			fmt.Print("\n")
 		}
-	}
-}
-
-func ListFiles(notes NotesFiles) {
-	for filename, _ := range notes {
-		listSections(notes[string(filename)])
 	}
 }
 
@@ -136,7 +97,7 @@ func main() {
 		firstArg := args[1]
 		switch {
 		case firstArg == "list-sections":
-			ListFiles(notes)
+			ListSections(notes)
 			return
 		case firstArg == "edit":
 			if len(args) > 2 {
@@ -147,8 +108,8 @@ func main() {
 			}
 			return
 		}
-		PrintFileSections(notes, args[1])
+		PrintSections(notes, args[1])
 	} else {
-		PrintFileSections(notes, "")
+		PrintSections(notes, "")
 	}
 }
