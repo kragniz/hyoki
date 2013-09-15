@@ -7,5 +7,10 @@ install: hyoki
 	cp hyoki /usr/local/bin/
 	cp bash/hyoki /etc/bash_completion.d/
 
-viminstall:
-	cp -Rv vim/* ~/.vim
+plugin: ~/.vim/syntax/hyoki.vim ~/.vim/ftdetect/hyoki.vim
+
+~/.vim/syntax/hyoki.vim:
+	cp -Rv vim/syntax/* ~/.vim/syntax/
+
+~/.vim/ftdetect/hyoki.vim:
+	cp -Rv vim/ftdetect/* ~/.vim/ftdetect/
