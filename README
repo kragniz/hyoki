@@ -13,3 +13,14 @@ Notes are currently stored in ~/.hyoki/notes and look like:
         -do something about something
             *do it like this
         -do something else
+
+Installation
+============
+
+To install hyoki for all users, run as root
+
+    $ make install
+
+To install vim plugins, run
+
+    $ make plugin
