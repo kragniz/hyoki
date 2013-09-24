@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"os/user"
@@ -87,6 +88,29 @@ func Edit(filename string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+func GenerateJsonRequest(contents string, filename string) string {
+	json := `{
+  "description": "hyoki exported gist",
+  "public": false,
+  "files": {
+    "%s": {
+      "content": "%s"
+    }
+  }
+}`
+	return fmt.Sprintf(json, filename, contents)
+}
+
+func PostGist(file string, filename string) string {
+	resp, _ := http.Post("https://api.github.com/gists", "text/json",
+		strings.NewReader(GenerateJsonRequest(file, filename)))
+	body, _ := ioutil.ReadAll(resp.Body)
+	htmlRegex := regexp.MustCompile(`"html_url":.?"https://gist.github.com/[0-9a-f]+"`)
+	url := htmlRegex.Find(body)
+	url = url[12 : len(url)-1]
+	return string(url)
 }
 
 func main() {
