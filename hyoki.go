@@ -25,7 +25,6 @@ func HyokiPath() string {
 
 func HyokiFile() []byte {
 	path := HyokiPath()
-
 	notes, err := ioutil.ReadFile(path)
 
 	if err != nil {
@@ -53,12 +52,22 @@ func PrintSections(notes Notes, exp string) {
 	rexp, _ := regexp.Compile(exp)
 	for section := range notes {
 		if rexp.Match([]byte(section)) {
-			fmt.Println(section)
-			for _, line := range notes[section] {
-				fmt.Println(line)
-			}
+			fmt.Println(SectionString(notes, section))
 		}
 	}
+}
+
+func SectionString(notes Notes, section string) string {
+	for name := range notes {
+		if name == section {
+			str := section
+			for _, line := range notes[section] {
+				str = str + "\n" + line
+			}
+			return str
+		}
+	}
+	return ""
 }
 
 func ListSections(notes Notes) {
