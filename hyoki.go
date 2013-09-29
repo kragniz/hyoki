@@ -143,6 +143,6 @@ func main() {
 		}
 		PrintSections(notes, args[1])
 	} else {
-		PrintSections(notes, "")
+		Edit(HyokiPath())
 	}
 }
