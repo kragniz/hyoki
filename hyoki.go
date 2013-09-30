@@ -99,6 +99,13 @@ func Edit(filename string) error {
 	return cmd.Run()
 }
 
+func EscapeJson(json string) string {
+	quoteRe := regexp.MustCompile(`"`)
+	json = quoteRe.ReplaceAllString(json, `\"`)
+	newlineRe := regexp.MustCompile("\n")
+	return newlineRe.ReplaceAllString(json, `\n`)
+}
+
 func GenerateJsonRequest(contents string, filename string) string {
 	json := `{
   "description": "hyoki exported gist",
