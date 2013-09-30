@@ -9,8 +9,8 @@ install: hyoki
 
 plugin: ~/.vim/syntax/hyoki.vim ~/.vim/ftdetect/hyoki.vim
 
-~/.vim/syntax/hyoki.vim:
+~/.vim/syntax/hyoki.vim: vim/syntax/hyoki.vim
 	cp -Rv vim/syntax/* ~/.vim/syntax/
 
-~/.vim/ftdetect/hyoki.vim:
+~/.vim/ftdetect/hyoki.vim: vim/ftdetect/hyoki.vim
 	cp -Rv vim/ftdetect/* ~/.vim/ftdetect/
