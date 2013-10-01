@@ -116,12 +116,13 @@ func GenerateJsonRequest(contents string, filename string) string {
     }
   }
 }`
-	return fmt.Sprintf(json, filename, contents)
+	return fmt.Sprintf(json, filename, EscapeJson(contents))
 }
 
 func PostGist(file string, filename string) string {
+	json := GenerateJsonRequest(file, filename)
 	resp, _ := http.Post("https://api.github.com/gists", "text/json",
-		strings.NewReader(GenerateJsonRequest(file, filename)))
+		strings.NewReader(json))
 	body, _ := ioutil.ReadAll(resp.Body)
 	htmlRegex := regexp.MustCompile(`"html_url":.?"https://gist.github.com/[0-9a-f]+"`)
 	url := htmlRegex.Find(body)
@@ -145,6 +146,15 @@ func main() {
 				EditSection(HyokiPath(), section)
 			} else {
 				Edit(HyokiPath())
+			}
+			return
+		case firstArg == "gist":
+			fmt.Println("Posting gist...")
+			if len(args) > 2 {
+				url := PostGist(SectionString(notes, args[2]), args[2])
+				fmt.Println("Posted to: " + url)
+			} else {
+				fmt.Println("nope")
 			}
 			return
 		}
