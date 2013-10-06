@@ -14,4 +14,7 @@ highlight link item comment
 syntax match subitem "^\s*\*"
 highlight link subitem comment
 
+syntax match done "\[done\]"
+highlight link done todo
+
 let b:current_syntax = "hyoki"
