@@ -121,8 +121,14 @@ func GenerateJsonRequest(contents string, filename string) string {
 
 func PostGist(file string, filename string) string {
 	json := GenerateJsonRequest(file, filename)
-	resp, _ := http.Post("https://api.github.com/gists", "text/json",
+	resp, err := http.Post("https://api.github.com/gists", "text/json",
 		strings.NewReader(json))
+
+	if err != nil {
+		fmt.Println("Couldn't connect to gist.github.com")
+		os.Exit(1)
+	}
+
 	body, _ := ioutil.ReadAll(resp.Body)
 	htmlRegex := regexp.MustCompile(`"html_url":.?"https://gist.github.com/[0-9a-f]+"`)
 	url := htmlRegex.Find(body)
